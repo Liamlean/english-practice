@@ -19,6 +19,11 @@ def tts_url(word):
 manifest, fails = [], []
 for i, w in enumerate(words, 1):
     dest = os.path.join(outdir, w + ".mp3")
+    # Skip words that already have a valid file — only fetch new ones.
+    if os.path.exists(dest) and os.path.getsize(dest) > 500:
+        manifest.append(w)
+        print(f"[{i}/{len(words)}] {w:14s} (đã có)", flush=True)
+        continue
     ok, size = False, 0
     for attempt in range(4):
         try:

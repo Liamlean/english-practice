@@ -17,12 +17,12 @@ npm install
 npm start
 ```
 
-Mở **http://localhost:3000**. Lần đầu chạy sẽ tự tạo file SQLite cục bộ `data/app.db` và nạp 115 từ.
+Mở **http://localhost:3000**. Lần đầu chạy sẽ tự tạo file SQLite cục bộ `data/app.db` và nạp 225 từ.
 
 > Để trống `TURSO_DATABASE_URL` trong `.env` thì app dùng file cục bộ — hoàn toàn offline.
 
 - `npm run dev` — tự khởi động lại khi sửa code.
-- `npm run seed` — nạp lại kho từ (dùng `--force` để xoá sạch rồi thêm lại).
+- `npm run seed` — nạp thêm từ mới vào kho (thêm chứ không xoá, an toàn với dữ liệu người học; dùng `--force` để xoá sạch rồi nạp lại).
 
 ---
 
@@ -111,7 +111,7 @@ english-practice/
 │   ├── index.js          # chạy cục bộ: init DB, seed, listen
 │   ├── db.js             # libSQL/Turso + schema + streak/stats
 │   ├── auth.js           # bcrypt, JWT cookie, guard
-│   ├── seed.js           # kho 115 từ vựng
+│   ├── seed.js           # kho 225 từ vựng
 │   └── routes/           # auth · words · study · stats · admin
 ├── public/               # FRONTEND
 │   ├── index.html

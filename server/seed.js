@@ -1,10 +1,10 @@
 // language: JavaScript (ESM), file: server/seed.js
-// *Vocabulary bank across CEFR levels A1–C2. Auto-seeds an empty database.*
-// *Run "npm run seed" (or "node server/seed.js --force") to reload the bank.*
+// *Vocabulary bank across CEFR levels A1–C2 (225 words).*
+// *"npm run seed" adds any new words (INSERT OR IGNORE); --force wipes and reseeds.*
 
 import "dotenv/config";
 import { pathToFileURL } from "node:url";
-import { client, get, run, initDb } from "./db.js";
+import { client, run, initDb } from "./db.js";
 
 export const WORDS = [
   // ---------------------------- A1 ----------------------------
@@ -38,6 +38,21 @@ export const WORDS = [
   { en: "run", vi: "chạy", level: "A1", category: "Động từ", emoji: "🏃", ipa: "/rʌn/", example_en: "I run every morning.", example_vi: "Tôi chạy mỗi sáng." },
   { en: "sleep", vi: "ngủ", level: "A1", category: "Động từ", emoji: "😴", ipa: "/sliːp/", example_en: "I sleep at ten o'clock.", example_vi: "Tôi ngủ lúc mười giờ." },
   { en: "good", vi: "tốt", level: "A1", category: "Tính từ", emoji: "👍", ipa: "/ɡʊd/", example_en: "This is a good book.", example_vi: "Đây là một quyển sách hay." },
+  { en: "tea", vi: "trà", level: "A1", category: "Đồ ăn", emoji: "🍵", ipa: "/tiː/", example_en: "I drink tea with milk.", example_vi: "Tôi uống trà với sữa." },
+  { en: "coffee", vi: "cà phê", level: "A1", category: "Đồ ăn", emoji: "☕", ipa: "/ˈkɒf.i/", example_en: "He drinks coffee in the morning.", example_vi: "Anh ấy uống cà phê vào buổi sáng." },
+  { en: "fish", vi: "con cá", level: "A1", category: "Động vật", emoji: "🐟", ipa: "/fɪʃ/", example_en: "We eat fish on Friday.", example_vi: "Chúng tôi ăn cá vào thứ Sáu." },
+  { en: "meat", vi: "thịt", level: "A1", category: "Đồ ăn", emoji: "🥩", ipa: "/miːt/", example_en: "I don't eat meat.", example_vi: "Tôi không ăn thịt." },
+  { en: "city", vi: "thành phố", level: "A1", category: "Đời sống", emoji: "🏙️", ipa: "/ˈsɪt.i/", example_en: "Hanoi is a big city.", example_vi: "Hà Nội là một thành phố lớn." },
+  { en: "park", vi: "công viên", level: "A1", category: "Thiên nhiên", emoji: "🌲", ipa: "/pɑːk/", example_en: "We play in the park.", example_vi: "Chúng tôi chơi ở công viên." },
+  { en: "family", vi: "gia đình", level: "A1", category: "Gia đình", emoji: "👨‍👩‍👧", ipa: "/ˈfæm.əl.i/", example_en: "My family is small.", example_vi: "Gia đình tôi nhỏ." },
+  { en: "brother", vi: "anh/em trai", level: "A1", category: "Gia đình", emoji: "👦", ipa: "/ˈbrʌð.ər/", example_en: "My brother is ten.", example_vi: "Anh trai tôi mười tuổi." },
+  { en: "sister", vi: "chị/em gái", level: "A1", category: "Gia đình", emoji: "👧", ipa: "/ˈsɪs.tər/", example_en: "My sister sings well.", example_vi: "Chị tôi hát hay." },
+  { en: "child", vi: "đứa trẻ", level: "A1", category: "Gia đình", emoji: "🧒", ipa: "/tʃaɪld/", example_en: "The child is asleep.", example_vi: "Đứa trẻ đang ngủ." },
+  { en: "money", vi: "tiền", level: "A1", category: "Đời sống", emoji: "💰", ipa: "/ˈmʌn.i/", example_en: "I need some money.", example_vi: "Tôi cần chút tiền." },
+  { en: "phone", vi: "điện thoại", level: "A1", category: "Đồ vật", emoji: "📱", ipa: "/fəʊn/", example_en: "My phone is new.", example_vi: "Điện thoại của tôi mới." },
+  { en: "happy", vi: "hạnh phúc", level: "A1", category: "Tính từ", emoji: "😊", ipa: "/ˈhæp.i/", example_en: "I am happy today.", example_vi: "Hôm nay tôi hạnh phúc." },
+  { en: "big", vi: "to, lớn", level: "A1", category: "Tính từ", emoji: "🐘", ipa: "/bɪɡ/", example_en: "The box is big.", example_vi: "Cái hộp to." },
+  { en: "small", vi: "nhỏ", level: "A1", category: "Tính từ", emoji: "🐭", ipa: "/smɔːl/", example_en: "The cat is small.", example_vi: "Con mèo nhỏ." },
 
   // ---------------------------- A2 ----------------------------
   { en: "kitchen", vi: "nhà bếp", level: "A2", category: "Đời sống", emoji: "🍳", ipa: "/ˈkɪtʃ.ɪn/", example_en: "The kitchen is clean.", example_vi: "Nhà bếp sạch sẽ." },
@@ -60,6 +75,26 @@ export const WORDS = [
   { en: "village", vi: "ngôi làng", level: "A2", category: "Đời sống", emoji: "🏡", ipa: "/ˈvɪl.ɪdʒ/", example_en: "He lives in a small village.", example_vi: "Cậu ấy sống ở một ngôi làng nhỏ." },
   { en: "bridge", vi: "cây cầu", level: "A2", category: "Đời sống", emoji: "🌉", ipa: "/brɪdʒ/", example_en: "The bridge is very long.", example_vi: "Cây cầu rất dài." },
   { en: "ticket", vi: "cái vé", level: "A2", category: "Đời sống", emoji: "🎫", ipa: "/ˈtɪk.ɪt/", example_en: "Buy a ticket, please.", example_vi: "Làm ơn mua một chiếc vé." },
+  { en: "station", vi: "ga tàu", level: "A2", category: "Đời sống", emoji: "🚉", ipa: "/ˈsteɪ.ʃən/", example_en: "The station is far away.", example_vi: "Ga tàu ở xa." },
+  { en: "airport", vi: "sân bay", level: "A2", category: "Đời sống", emoji: "🛫", ipa: "/ˈeə.pɔːt/", example_en: "We went to the airport.", example_vi: "Chúng tôi đã ra sân bay." },
+  { en: "umbrella", vi: "ô, dù", level: "A2", category: "Đồ vật", emoji: "☂️", ipa: "/ʌmˈbrel.ə/", example_en: "Take an umbrella today.", example_vi: "Hãy mang theo ô hôm nay." },
+  { en: "wallet", vi: "ví tiền", level: "A2", category: "Đồ vật", emoji: "👛", ipa: "/ˈwɒl.ɪt/", example_en: "I lost my wallet.", example_vi: "Tôi bị mất ví." },
+  { en: "stranger", vi: "người lạ", level: "A2", category: "Đời sống", emoji: "🧑", ipa: "/ˈstreɪn.dʒər/", example_en: "Don't talk to strangers.", example_vi: "Đừng nói chuyện với người lạ." },
+  { en: "luggage", vi: "hành lý", level: "A2", category: "Đồ vật", emoji: "🧳", ipa: "/ˈlʌɡ.ɪdʒ/", example_en: "My luggage is heavy.", example_vi: "Hành lý của tôi nặng." },
+  { en: "schedule", vi: "lịch trình", level: "A2", category: "Đời sống", emoji: "🗓️", ipa: "/ˈʃed.juːl/", example_en: "What is your schedule?", example_vi: "Lịch trình của bạn thế nào?" },
+  { en: "camera", vi: "máy ảnh", level: "A2", category: "Đồ vật", emoji: "📷", ipa: "/ˈkæm.rə/", example_en: "This camera is easy to use.", example_vi: "Máy ảnh này dễ dùng." },
+  { en: "island", vi: "hòn đảo", level: "A2", category: "Thiên nhiên", emoji: "🏝️", ipa: "/ˈaɪ.lənd/", example_en: "The island is beautiful.", example_vi: "Hòn đảo thật đẹp." },
+  { en: "beach", vi: "bãi biển", level: "A2", category: "Thiên nhiên", emoji: "🏖️", ipa: "/biːtʃ/", example_en: "We swim at the beach.", example_vi: "Chúng tôi bơi ở bãi biển." },
+  { en: "hike", vi: "đi bộ đường dài", level: "A2", category: "Động từ", emoji: "🥾", ipa: "/haɪk/", example_en: "We hike in the mountains.", example_vi: "Chúng tôi đi bộ đường dài trong núi." },
+  { en: "cook", vi: "nấu ăn", level: "A2", category: "Động từ", emoji: "👨‍🍳", ipa: "/kʊk/", example_en: "I cook dinner at six.", example_vi: "Tôi nấu bữa tối lúc sáu giờ." },
+  { en: "return", vi: "trở về", level: "A2", category: "Động từ", emoji: "↩️", ipa: "/rɪˈtɜːn/", example_en: "I return home at five.", example_vi: "Tôi về nhà lúc năm giờ." },
+  { en: "forget", vi: "quên", level: "A2", category: "Động từ", emoji: "🧠", ipa: "/fəˈɡet/", example_en: "Don't forget your keys.", example_vi: "Đừng quên chìa khóa." },
+  { en: "remember", vi: "nhớ", level: "A2", category: "Động từ", emoji: "💭", ipa: "/rɪˈmem.bər/", example_en: "Remember my phone number.", example_vi: "Nhớ số điện thoại của tôi." },
+  { en: "expensive", vi: "đắt tiền", level: "A2", category: "Tính từ", emoji: "💸", ipa: "/ɪkˈspen.sɪv/", example_en: "This coat is expensive.", example_vi: "Chiếc áo này đắt." },
+  { en: "cheap", vi: "rẻ", level: "A2", category: "Tính từ", emoji: "🪙", ipa: "/tʃiːp/", example_en: "The food here is cheap.", example_vi: "Đồ ăn ở đây rẻ." },
+  { en: "afraid", vi: "sợ hãi", level: "A2", category: "Tính từ", emoji: "😨", ipa: "/əˈfreɪd/", example_en: "She is afraid of dogs.", example_vi: "Cô ấy sợ chó." },
+  { en: "hungry", vi: "đói", level: "A2", category: "Tính từ", emoji: "😋", ipa: "/ˈhʌŋ.ɡri/", example_en: "I am very hungry.", example_vi: "Tôi rất đói." },
+  { en: "thirsty", vi: "khát", level: "A2", category: "Tính từ", emoji: "🧃", ipa: "/ˈθɜː.sti/", example_en: "I am thirsty after the run.", example_vi: "Tôi khát nước sau khi chạy." },
 
   // ---------------------------- B1 ----------------------------
   { en: "achieve", vi: "đạt được", level: "B1", category: "Động từ", emoji: "🎯", ipa: "/əˈtʃiːv/", example_en: "She achieved her goal.", example_vi: "Cô ấy đã đạt được mục tiêu." },
@@ -82,6 +117,26 @@ export const WORDS = [
   { en: "pollution", vi: "ô nhiễm", level: "B1", category: "Danh từ", emoji: "🏭", ipa: "/pəˈluː.ʃən/", example_en: "Air pollution is serious.", example_vi: "Ô nhiễm không khí rất nghiêm trọng." },
   { en: "protect", vi: "bảo vệ", level: "B1", category: "Động từ", emoji: "🛡️", ipa: "/prəˈtekt/", example_en: "Protect the forests.", example_vi: "Hãy bảo vệ rừng." },
   { en: "relationship", vi: "mối quan hệ", level: "B1", category: "Danh từ", emoji: "💞", ipa: "/rɪˈleɪ.ʃən.ʃɪp/", example_en: "They have a good relationship.", example_vi: "Họ có một mối quan hệ tốt." },
+  { en: "available", vi: "còn trống, có sẵn", level: "B1", category: "Tính từ", emoji: "✅", ipa: "/əˈveɪ.lə.bəl/", example_en: "Is this room available?", example_vi: "Phòng này còn trống không?" },
+  { en: "behavior", vi: "hành vi", level: "B1", category: "Danh từ", emoji: "🎭", ipa: "/bɪˈheɪ.vjər/", example_en: "Her behavior is polite.", example_vi: "Hành vi của cô ấy lịch sự." },
+  { en: "career", vi: "sự nghiệp", level: "B1", category: "Danh từ", emoji: "💼", ipa: "/kəˈrɪər/", example_en: "He wants a good career.", example_vi: "Anh ấy muốn có một sự nghiệp tốt." },
+  { en: "decision", vi: "quyết định", level: "B1", category: "Danh từ", emoji: "⚖️", ipa: "/dɪˈsɪʒ.ən/", example_en: "It was a hard decision.", example_vi: "Đó là một quyết định khó khăn." },
+  { en: "employ", vi: "tuyển dụng", level: "B1", category: "Động từ", emoji: "🏢", ipa: "/ɪmˈplɔɪ/", example_en: "They employ many workers.", example_vi: "Họ tuyển nhiều công nhân." },
+  { en: "familiar", vi: "quen thuộc", level: "B1", category: "Tính từ", emoji: "🤗", ipa: "/fəˈmɪl.i.ər/", example_en: "This song sounds familiar.", example_vi: "Bài hát này nghe quen quen." },
+  { en: "generate", vi: "tạo ra", level: "B1", category: "Động từ", emoji: "⚙️", ipa: "/ˈdʒen.ər.eɪt/", example_en: "The machine generates power.", example_vi: "Cỗ máy tạo ra năng lượng." },
+  { en: "intention", vi: "ý định", level: "B1", category: "Danh từ", emoji: "🎯", ipa: "/ɪnˈten.ʃən/", example_en: "It was not my intention.", example_vi: "Đó không phải ý định của tôi." },
+  { en: "maintain", vi: "duy trì", level: "B1", category: "Động từ", emoji: "🔧", ipa: "/meɪnˈteɪn/", example_en: "Maintain your car regularly.", example_vi: "Bảo dưỡng xe của bạn thường xuyên." },
+  { en: "obvious", vi: "hiển nhiên", level: "B1", category: "Tính từ", emoji: "👀", ipa: "/ˈɒb.vi.əs/", example_en: "The answer is obvious.", example_vi: "Câu trả lời hiển nhiên." },
+  { en: "peer", vi: "bạn cùng trang lứa", level: "B1", category: "Danh từ", emoji: "🤝", ipa: "/pɪər/", example_en: "Teens learn from their peers.", example_vi: "Thanh thiếu niên học hỏi từ bạn bè." },
+  { en: "pressure", vi: "áp lực", level: "B1", category: "Danh từ", emoji: "🎈", ipa: "/ˈpreʃ.ər/", example_en: "He works under pressure.", example_vi: "Anh ấy làm việc dưới áp lực." },
+  { en: "public", vi: "công cộng", level: "B1", category: "Tính từ", emoji: "🏛️", ipa: "/ˈpʌb.lɪk/", example_en: "This park is public.", example_vi: "Công viên này là nơi công cộng." },
+  { en: "reduce", vi: "giảm bớt", level: "B1", category: "Động từ", emoji: "📉", ipa: "/rɪˈdjuːs/", example_en: "We must reduce waste.", example_vi: "Chúng ta phải giảm rác thải." },
+  { en: "solution", vi: "giải pháp", level: "B1", category: "Danh từ", emoji: "🧪", ipa: "/səˈluː.ʃən/", example_en: "We found a solution.", example_vi: "Chúng tôi đã tìm ra giải pháp." },
+  { en: "support", vi: "ủng hộ, hỗ trợ", level: "B1", category: "Động từ", emoji: "🧡", ipa: "/səˈpɔːt/", example_en: "I support your idea.", example_vi: "Tôi ủng hộ ý tưởng của bạn." },
+  { en: "technology", vi: "công nghệ", level: "B1", category: "Danh từ", emoji: "💻", ipa: "/tekˈnɒl.ə.dʒi/", example_en: "Technology changes fast.", example_vi: "Công nghệ thay đổi rất nhanh." },
+  { en: "uncertainty", vi: "điều không chắc chắn", level: "B1", category: "Danh từ", emoji: "❓", ipa: "/ʌnˈsɜː.tən.ti/", example_en: "The result is full of uncertainty.", example_vi: "Kết quả đầy điều không chắc chắn." },
+  { en: "valuable", vi: "quý giá", level: "B1", category: "Tính từ", emoji: "💎", ipa: "/ˈvæl.ju.ə.bəl/", example_en: "This is a valuable lesson.", example_vi: "Đây là một bài học quý giá." },
+  { en: "volunteer", vi: "tình nguyện", level: "B1", category: "Động từ", emoji: "❤️", ipa: "/ˌvɒl.ənˈtɪər/", example_en: "She volunteers at the clinic.", example_vi: "Cô ấy làm tình nguyện tại phòng khám." },
 
   // ---------------------------- B2 ----------------------------
   { en: "ambiguous", vi: "mơ hồ", level: "B2", category: "Tính từ", emoji: "🌫️", ipa: "/æmˈbɪɡ.ju.əs/", example_en: "His answer was ambiguous.", example_vi: "Câu trả lời của anh ấy rất mơ hồ." },
@@ -104,6 +159,26 @@ export const WORDS = [
   { en: "undermine", vi: "làm suy yếu", level: "B2", category: "Động từ", emoji: "🕳️", ipa: "/ˌʌn.dəˈmaɪn/", example_en: "Don't undermine her confidence.", example_vi: "Đừng làm suy yếu sự tự tin của cô ấy." },
   { en: "vulnerable", vi: "dễ bị tổn thương", level: "B2", category: "Tính từ", emoji: "🥚", ipa: "/ˈvʌl.nər.ə.bəl/", example_en: "Children are vulnerable.", example_vi: "Trẻ em rất dễ bị tổn thương." },
   { en: "acknowledge", vi: "thừa nhận", level: "B2", category: "Động từ", emoji: "✔️", ipa: "/əkˈnɒl.ɪdʒ/", example_en: "I acknowledge my mistake.", example_vi: "Tôi thừa nhận lỗi của mình." },
+  { en: "abolish", vi: "bãi bỏ", level: "B2", category: "Động từ", emoji: "🚫", ipa: "/əˈbɒl.ɪʃ/", example_en: "They want to abolish the tax.", example_vi: "Họ muốn bãi bỏ loại thuế này." },
+  { en: "arbitrary", vi: "tùy ý", level: "B2", category: "Tính từ", emoji: "🎲", ipa: "/ˈɑː.bɪ.trər.i/", example_en: "The rule seems arbitrary.", example_vi: "Quy định này có vẻ tùy ý." },
+  { en: "coincide", vi: "trùng khớp", level: "B2", category: "Động từ", emoji: "🕰️", ipa: "/ˌkəʊ.ɪnˈsaɪd/", example_en: "Our plans coincide.", example_vi: "Kế hoạch của chúng ta trùng nhau." },
+  { en: "confront", vi: "đối mặt", level: "B2", category: "Động từ", emoji: "🥊", ipa: "/kənˈfrʌnt/", example_en: "You must confront the problem.", example_vi: "Bạn phải đối mặt với vấn đề." },
+  { en: "derive", vi: "bắt nguồn từ", level: "B2", category: "Động từ", emoji: "🧬", ipa: "/dɪˈraɪv/", example_en: "This word derives from Latin.", example_vi: "Từ này bắt nguồn từ tiếng Latin." },
+  { en: "endorse", vi: "tán thành, xác nhận", level: "B2", category: "Động từ", emoji: "🗳️", ipa: "/ɪnˈdɔːs/", example_en: "The professor endorsed the plan.", example_vi: "Giáo sư tán thành kế hoạch." },
+  { en: "fluctuate", vi: "dao động", level: "B2", category: "Động từ", emoji: "🎢", ipa: "/ˈflʌk.tʃu.eɪt/", example_en: "Prices fluctuate daily.", example_vi: "Giá cả dao động mỗi ngày." },
+  { en: "genuine", vi: "chân thật, đích thực", level: "B2", category: "Tính từ", emoji: "💛", ipa: "/ˈdʒen.ju.ɪn/", example_en: "She has a genuine smile.", example_vi: "Cô ấy có nụ cười chân thật." },
+  { en: "hierarchy", vi: "hệ thống phân cấp", level: "B2", category: "Danh từ", emoji: "🪜", ipa: "/ˈhaɪə.rɑː.ki/", example_en: "There is a clear hierarchy.", example_vi: "Có một hệ thống phân cấp rõ ràng." },
+  { en: "impose", vi: "áp đặt", level: "B2", category: "Động từ", emoji: "📏", ipa: "/ɪmˈpəʊz/", example_en: "Don't impose your views on me.", example_vi: "Đừng áp đặt quan điểm của bạn lên tôi." },
+  { en: "lucrative", vi: "sinh lợi", level: "B2", category: "Tính từ", emoji: "💹", ipa: "/ˈluː.krə.tɪv/", example_en: "It is a lucrative business.", example_vi: "Đó là một công việc kinh doanh sinh lợi." },
+  { en: "mediate", vi: "hòa giải", level: "B2", category: "Động từ", emoji: "🧑‍⚖️", ipa: "/ˈmiː.di.eɪt/", example_en: "She mediated between the two sides.", example_vi: "Cô ấy hòa giải giữa hai bên." },
+  { en: "notion", vi: "khái niệm", level: "B2", category: "Danh từ", emoji: "💡", ipa: "/ˈnəʊ.ʃən/", example_en: "The notion of freedom is powerful.", example_vi: "Khái niệm tự do rất mạnh mẽ." },
+  { en: "prohibit", vi: "cấm", level: "B2", category: "Động từ", emoji: "⛔", ipa: "/prəˈhɪb.ɪt/", example_en: "Smoking is prohibited here.", example_vi: "Hút thuốc bị cấm ở đây." },
+  { en: "rational", vi: "hợp lý, có lý trí", level: "B2", category: "Tính từ", emoji: "🧮", ipa: "/ˈræʃ.ən.əl/", example_en: "He made a rational choice.", example_vi: "Anh ấy đã chọn một cách hợp lý." },
+  { en: "skeptical", vi: "hoài nghi", level: "B2", category: "Tính từ", emoji: "🤨", ipa: "/ˈskep.tɪ.kəl/", example_en: "I am skeptical about that.", example_vi: "Tôi hoài nghi về điều đó." },
+  { en: "transform", vi: "biến đổi", level: "B2", category: "Động từ", emoji: "🦋", ipa: "/trænsˈfɔːm/", example_en: "Caterpillars transform into butterflies.", example_vi: "Sâu bướm biến thành bướm." },
+  { en: "viable", vi: "khả thi", level: "B2", category: "Tính từ", emoji: "🪴", ipa: "/ˈvaɪ.ə.bəl/", example_en: "Is this a viable plan?", example_vi: "Kế hoạch này có khả thi không?" },
+  { en: "widespread", vi: "lan rộng", level: "B2", category: "Tính từ", emoji: "🌊", ipa: "/ˈwaɪd.spred/", example_en: "The news is widespread.", example_vi: "Tin tức lan rộng khắp nơi." },
+  { en: "advocate", vi: "ủng hộ", level: "B2", category: "Động từ", emoji: "📣", ipa: "/ˈæd.və.keɪt/", example_en: "She advocates for change.", example_vi: "Cô ấy ủng hộ sự thay đổi." },
 
   // ---------------------------- C1 ----------------------------
   { en: "alleviate", vi: "làm dịu bớt", level: "C1", category: "Động từ", emoji: "💊", ipa: "/əˈliː.vi.eɪt/", example_en: "This medicine alleviates pain.", example_vi: "Thuốc này làm dịu cơn đau." },
@@ -121,6 +196,26 @@ export const WORDS = [
   { en: "pragmatic", vi: "thực dụng", level: "C1", category: "Tính từ", emoji: "🔧", ipa: "/præɡˈmæt.ɪk/", example_en: "A pragmatic approach.", example_vi: "Một cách tiếp cận thực dụng." },
   { en: "scrutinize", vi: "xem xét kỹ lưỡng", level: "C1", category: "Động từ", emoji: "🔬", ipa: "/ˈskruː.tə.naɪz/", example_en: "They scrutinize the data.", example_vi: "Họ xem xét kỹ lưỡng dữ liệu." },
   { en: "resilience", vi: "khả năng phục hồi", level: "C1", category: "Danh từ", emoji: "🌿", ipa: "/rɪˈzɪl.i.əns/", example_en: "She showed great resilience.", example_vi: "Cô ấy thể hiện khả năng phục hồi tốt." },
+  { en: "albeit", vi: "mặc dù", level: "C1", category: "Liên từ", emoji: "🪢", ipa: "/ɔːlˈbiː.ɪt/", example_en: "Albeit small, it works well.", example_vi: "Mặc dù nhỏ, nó hoạt động tốt." },
+  { en: "apprehension", vi: "sự lo lắng", level: "C1", category: "Danh từ", emoji: "😟", ipa: "/ˌæp.rɪˈhen.ʃən/", example_en: "She felt some apprehension.", example_vi: "Cô ấy cảm thấy hơi lo lắng." },
+  { en: "assert", vi: "khẳng định", level: "C1", category: "Động từ", emoji: "✊", ipa: "/əˈsɜːt/", example_en: "He asserted his rights.", example_vi: "Anh ấy khẳng định quyền của mình." },
+  { en: "circumspect", vi: "thận trọng", level: "C1", category: "Tính từ", emoji: "🧐", ipa: "/ˈsɜː.kəm.spekt/", example_en: "Be circumspect before deciding.", example_vi: "Hãy thận trọng trước khi quyết định." },
+  { en: "concede", vi: "chịu thua, nhượng bộ", level: "C1", category: "Động từ", emoji: "🏳️", ipa: "/kənˈsiːd/", example_en: "They conceded the argument.", example_vi: "Họ chịu thua trong cuộc tranh luận." },
+  { en: "conducive", vi: "thuận lợi, có lợi", level: "C1", category: "Tính từ", emoji: "🪟", ipa: "/kənˈdjuː.sɪv/", example_en: "A quiet room is conducive to study.", example_vi: "Một căn phòng yên tĩnh thuận lợi cho việc học." },
+  { en: "discrepancy", vi: "sự chênh lệch", level: "C1", category: "Danh từ", emoji: "📐", ipa: "/dɪˈskrep.ən.si/", example_en: "There is a discrepancy in the numbers.", example_vi: "Có sự chênh lệch trong các con số." },
+  { en: "eloquent", vi: "hùng biện", level: "C1", category: "Tính từ", emoji: "🎤", ipa: "/ˈel.ə.kwənt/", example_en: "She gave an eloquent speech.", example_vi: "Cô ấy có bài phát biểu hùng biện." },
+  { en: "erroneous", vi: "sai lầm", level: "C1", category: "Tính từ", emoji: "❌", ipa: "/ɪˈrəʊ.ni.əs/", example_en: "The report contained erroneous data.", example_vi: "Báo cáo chứa dữ liệu sai." },
+  { en: "formidable", vi: "ghê gớm, đáng gờm", level: "C1", category: "Tính từ", emoji: "🏔️", ipa: "/fəˈmɪd.ə.bəl/", example_en: "A formidable opponent.", example_vi: "Một đối thủ ghê gớm." },
+  { en: "hinder", vi: "cản trở", level: "C1", category: "Động từ", emoji: "🪨", ipa: "/ˈhɪn.dər/", example_en: "Traffic hindered our progress.", example_vi: "Kẹt xe cản trở tiến độ của chúng tôi." },
+  { en: "imminent", vi: "sắp xảy ra", level: "C1", category: "Tính từ", emoji: "🌋", ipa: "/ˈɪm.ɪ.nənt/", example_en: "A storm is imminent.", example_vi: "Một cơn bão sắp xảy ra." },
+  { en: "obsolete", vi: "lỗi thời", level: "C1", category: "Tính từ", emoji: "📟", ipa: "/ˈɒb.sə.liːt/", example_en: "This device is obsolete.", example_vi: "Thiết bị này đã lỗi thời." },
+  { en: "precarious", vi: "bấp bênh", level: "C1", category: "Tính từ", emoji: "🧗", ipa: "/prɪˈkeə.ri.əs/", example_en: "His job is precarious.", example_vi: "Công việc của anh ấy bấp bênh." },
+  { en: "redundant", vi: "dư thừa", level: "C1", category: "Tính từ", emoji: "🗃️", ipa: "/rɪˈdʌn.dənt/", example_en: "The paragraph is redundant.", example_vi: "Đoạn văn này dư thừa." },
+  { en: "relinquish", vi: "từ bỏ, nhường lại", level: "C1", category: "Động từ", emoji: "✋", ipa: "/rɪˈlɪŋ.kwɪʃ/", example_en: "She relinquished control of the project.", example_vi: "Cô ấy từ bỏ quyền kiểm soát dự án." },
+  { en: "spontaneous", vi: "tự phát", level: "C1", category: "Tính từ", emoji: "🎆", ipa: "/spɒnˈteɪ.ni.əs/", example_en: "Their applause was spontaneous.", example_vi: "Tràng pháo tay của họ là tự phát." },
+  { en: "stringent", vi: "nghiêm ngặt", level: "C1", category: "Tính từ", emoji: "📜", ipa: "/ˈstrɪn.dʒənt/", example_en: "Stringent rules apply here.", example_vi: "Các quy định nghiêm ngặt được áp dụng ở đây." },
+  { en: "ostensibly", vi: "có vẻ như", level: "C1", category: "Trạng từ", emoji: "🎪", ipa: "/ɒsˈten.sɪ.bli/", example_en: "Ostensibly, he was calm.", example_vi: "Có vẻ như anh ấy bình tĩnh." },
+  { en: "tentative", vi: "dè dặt, tạm thời", level: "C1", category: "Tính từ", emoji: "⏸️", ipa: "/ˈten.tə.tɪv/", example_en: "She made a tentative offer.", example_vi: "Cô ấy đưa ra một lời đề nghị dè dặt." },
 
   // ---------------------------- C2 ----------------------------
   { en: "ephemeral", vi: "phù du, chóng tàn", level: "C2", category: "Tính từ", emoji: "🫧", ipa: "/ɪˈfem.ər.əl/", example_en: "Fame is ephemeral.", example_vi: "Danh vọng là phù du." },
@@ -133,6 +228,21 @@ export const WORDS = [
   { en: "obfuscate", vi: "làm khó hiểu", level: "C2", category: "Động từ", emoji: "🌫️", ipa: "/ˈɒb.fʌs.keɪt/", example_en: "He tried to obfuscate the facts.", example_vi: "Anh ấy cố làm mờ đi sự thật." },
   { en: "pernicious", vi: "độc hại ngầm", level: "C2", category: "Tính từ", emoji: "🐍", ipa: "/pəˈnɪʃ.əs/", example_en: "A pernicious rumor.", example_vi: "Một tin đồn độc hại." },
   { en: "taciturn", vi: "ít nói", level: "C2", category: "Tính từ", emoji: "🤐", ipa: "/ˈtæs.ɪ.tɜːn/", example_en: "He is calm and taciturn.", example_vi: "Anh ấy bình tĩnh và ít nói." },
+  { en: "acquiesce", vi: "bằng lòng, ưng thuận", level: "C2", category: "Động từ", emoji: "🤷", ipa: "/ˌæk.wiˈes/", example_en: "He acquiesced to the demand.", example_vi: "Anh ấy bằng lòng với yêu cầu." },
+  { en: "belligerent", vi: "hiếu chiến", level: "C2", category: "Tính từ", emoji: "🥋", ipa: "/bəˈlɪdʒ.ər.ənt/", example_en: "A belligerent tone.", example_vi: "Giọng điệu hiếu chiến." },
+  { en: "circumlocution", vi: "sự nói vòng vo", level: "C2", category: "Danh từ", emoji: "🌪️", ipa: "/ˌsɜː.kəm.ləˈkjuː.ʃən/", example_en: "Stop the circumlocution and answer.", example_vi: "Đừng vòng vo nữa và trả lời đi." },
+  { en: "defenestrate", vi: "ném ra cửa sổ", level: "C2", category: "Động từ", emoji: "🪟", ipa: "/ˌdiːˈfen.ɪ.streɪt/", example_en: "He defenestrated his old laptop.", example_vi: "Anh ấy ném chiếc laptop cũ ra cửa sổ." },
+  { en: "discombobulate", vi: "làm bối rối", level: "C2", category: "Động từ", emoji: "🙃", ipa: "/ˌdɪs.kəmˈbɒb.jə.leɪt/", example_en: "The news discombobulated everyone.", example_vi: "Tin tức làm mọi người bối rối." },
+  { en: "ebullient", vi: "tràn đầy nhiệt huyết", level: "C2", category: "Tính từ", emoji: "🎉", ipa: "/ɪˈbʌl.i.ənt/", example_en: "She was ebullient about the trip.", example_vi: "Cô ấy tràn đầy nhiệt huyết về chuyến đi." },
+  { en: "esoteric", vi: "bí truyền, khó hiểu", level: "C2", category: "Tính từ", emoji: "🧿", ipa: "/ˌes.əˈter.ɪk/", example_en: "The book is rather esoteric.", example_vi: "Cuốn sách khá khó hiểu." },
+  { en: "fulsome", vi: "quá lời, nịnh nọt", level: "C2", category: "Tính từ", emoji: "🥴", ipa: "/ˈfʊl.səm/", example_en: "Fulsome praise makes her uneasy.", example_vi: "Lời khen nịnh nọt khiến cô ấy khó chịu." },
+  { en: "halcyon", vi: "thanh bình, yên ấm", level: "C2", category: "Tính từ", emoji: "🌅", ipa: "/ˈhæl.si.ən/", example_en: "She recalled the halcyon days of childhood.", example_vi: "Cô ấy nhớ lại những ngày thanh bình thời thơ ấu." },
+  { en: "ineffable", vi: "không thể diễn tả", level: "C2", category: "Tính từ", emoji: "✨", ipa: "/ɪˈnef.ə.bəl/", example_en: "The beauty was ineffable.", example_vi: "Vẻ đẹp ấy không thể diễn tả." },
+  { en: "intransigent", vi: "ngoan cố", level: "C2", category: "Tính từ", emoji: "🧱", ipa: "/ɪnˈtræn.sɪ.dʒənt/", example_en: "An intransigent attitude.", example_vi: "Thái độ ngoan cố." },
+  { en: "lugubrious", vi: "buồn ủ rũ", level: "C2", category: "Tính từ", emoji: "🥀", ipa: "/ləˈɡuː.bri.əs/", example_en: "A lugubrious look.", example_vi: "Vẻ mặt buồn ủ rũ." },
+  { en: "magnanimous", vi: "độ lượng", level: "C2", category: "Tính từ", emoji: "🎗️", ipa: "/mæɡˈnæn.ɪ.məs/", example_en: "He was magnanimous in victory.", example_vi: "Anh ấy rất độ lượng khi chiến thắng." },
+  { en: "perspicacious", vi: "sáng suốt, tinh tường", level: "C2", category: "Tính từ", emoji: "🦉", ipa: "/ˌpɜː.spɪˈkeɪ.ʃəs/", example_en: "A perspicacious observation.", example_vi: "Một nhận xét sáng suốt." },
+  { en: "sycophant", vi: "kẻ nịnh hót", level: "C2", category: "Danh từ", emoji: "🦊", ipa: "/ˈsɪk.ə.fænt/", example_en: "He is surrounded by sycophants.", example_vi: "Anh ta bị vây quanh bởi những kẻ nịnh hót." },
 ];
 
 const INSERT_SQL = `INSERT OR IGNORE INTO words
@@ -141,8 +251,9 @@ const INSERT_SQL = `INSERT OR IGNORE INTO words
 
 export async function seedIfEmpty(force = false) {
   await initDb();
-  const row = await get("SELECT COUNT(*) AS c FROM words");
-  if (Number(row.c) > 0 && !force) return false;
+  // INSERT OR IGNORE is keyed on the unique `en` column, so on a non-empty
+  // table this only inserts NEW words — existing rows and student progress
+  // (word_state, reviews) are never touched. Safe to run anytime.
   if (force) await run("DELETE FROM words");
 
   const stmts = WORDS.map((w) => ({
