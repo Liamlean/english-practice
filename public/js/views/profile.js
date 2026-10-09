@@ -49,9 +49,9 @@ export function renderProfile(el) {
       </details>
 
       <details class="pw" id="voiceBox">
-        <summary>🔊 Giọng đọc</summary>
+        <summary>🔊 Giọng dự phòng</summary>
         <label class="field">
-          <span>Chọn giọng tiếng Anh (ưu tiên Anh–Anh 🇬🇧)</span>
+          <span>Giọng đọc dự phòng khi thiếu file ghi âm (ưu tiên Anh–Anh 🇬🇧)</span>
           <select id="voiceSel" class="voice-select"></select>
         </label>
         <button class="btn btn-ghost btn-block" id="voiceTest" type="button">🔊 Nghe thử</button>

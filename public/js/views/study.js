@@ -5,7 +5,7 @@ import { state, setStats } from "../store.js";
 import { api } from "../api.js";
 import { navigate, reload } from "../router.js";
 import { renderTopbar, toast, escapeHtml } from "../ui.js";
-import { speak } from "../speech.js";
+import { playWord } from "../audio.js";
 
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {
@@ -104,7 +104,7 @@ function runFlash(el, deck) {
     });
     el.querySelector("#speak").addEventListener("click", (e) => {
       e.stopPropagation();
-      speak(w.en);
+      playWord(w.en);
     });
     el.querySelector("#back").addEventListener("click", () => navigate("/dashboard"));
     el.querySelector("#again").addEventListener("click", () => answer(false));
@@ -207,7 +207,7 @@ function runQuiz(el, deck) {
     }
     el.querySelectorAll(".option").forEach((b) => (b.disabled = true));
 
-    speak(w.en); // pronounce the word to reinforce it
+    playWord(w.en); // pronounce the word to reinforce it
     try {
       const res = await api.review(w.id, correct);
       setStats(res.stats);

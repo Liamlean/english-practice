@@ -5,6 +5,7 @@ import { api } from "./api.js";
 import { state, setUser, setStats, setMeta } from "./store.js";
 import { setReload } from "./router.js";
 import { initTheme, renderTopbar } from "./ui.js";
+import { preloadAudio } from "./audio.js";
 import { renderAuth } from "./views/auth.js";
 import { renderDashboard } from "./views/dashboard.js";
 import { renderStudy } from "./views/study.js";
@@ -42,6 +43,7 @@ window.addEventListener("hashchange", render);
 
 (async function boot() {
   initTheme();
+  preloadAudio();
   try {
     const { user, stats } = await api.me();
     setUser(user);

@@ -86,7 +86,7 @@ git push -u origin main
 |---|---|
 | Đăng ký / Đăng nhập | Chỉ **tên đăng nhập + mật khẩu**. Mật khẩu băm bcrypt, phiên đăng nhập bằng JWT trong cookie httpOnly. |
 | Đổi mật khẩu | Trong **Hồ sơ → 🔒 Đổi mật khẩu**: nhập mật khẩu hiện tại + mật khẩu mới (≥ 6 ký tự). Không cần email. |
-| Giọng đọc | Dùng Web Speech API của trình duyệt, **ưu tiên giọng Anh–Anh (en-GB)**. Chọn giọng cụ thể trong **Hồ sơ → 🔊 Giọng đọc** (lưu theo thiết bị). |
+| Phát âm | Phát file ghi âm thật trong `public/audio/en/*.mp3` (giọng **Anh–Anh**). Nếu thiếu file, tự động chuyển sang giọng trình duyệt — chọn trong **Hồ sơ → 🔊 Giọng dự phòng**. |
 | Thẻ ghi nhớ | Anh → Việt. Lật thẻ xem nghĩa + câu ví dụ, nghe phát âm, đánh dấu "đã thuộc / chưa thuộc". |
 | Đoán từ | Việt → Anh. Chọn 1 trong 4 đáp án, có phản hồi và phát âm. |
 | Chuỗi ngày học 🔥 | Học mỗi ngày để giữ chuỗi, bỏ một ngày chuỗi về 1. Lưu cả kỷ lục. |
@@ -116,11 +116,18 @@ english-practice/
 ├── public/               # FRONTEND
 │   ├── index.html
 │   ├── css/styles.css
-│   └── js/               # app · api · store · router · ui · views/
+│   ├── audio/            # phát âm Anh–Anh: en/*.mp3 + manifest.json
+│   └── js/               # app · api · audio · speech · store · router · ui · views/
+├── scripts/
+│   └── gen_audio.py      # tạo lại file phát âm bằng TTS giọng Anh–Anh
 ├── package.json
 ├── .env.example
 └── README.md
 ```
+
+> **Âm thanh phát âm:** nằm sẵn trong `public/audio/en/` (một file `.mp3` cho mỗi từ, giọng Anh–Anh).
+> Khi thêm từ mới, chạy lại `python3 scripts/gen_audio.py` (cần Python 3) rồi commit thư mục `public/audio`.
+> Script dùng endpoint TTS công khai của Google (`tl=en-GB`) — chỉ chạy lúc build, không gọi lúc dùng app.
 
 ## 6. API
 
