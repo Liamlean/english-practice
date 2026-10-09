@@ -110,7 +110,7 @@ english-practice/
 │   ├── db.js             # libSQL/Turso + schema + streak/stats
 │   ├── auth.js           # bcrypt, JWT cookie, guard
 │   ├── seed.js           # kho 115 từ vựng
-│   └── routes/           # auth · words · study · stats
+│   └── routes/           # auth · words · study · stats · admin
 ├── public/               # FRONTEND
 │   ├── index.html
 │   ├── css/styles.css
@@ -133,6 +133,7 @@ english-practice/
 | POST | `/api/study/review` | `{ wordId, correct, localDate }` |
 | GET | `/api/stats?today=YYYY-MM-DD` | số liệu + tiến độ hôm nay |
 | POST | `/api/stats/goal` | `{ daily_goal, localDate }` |
+| GET | `/api/admin/stats?today=YYYY-MM-DD` | số liệu tổng hợp — chỉ admin |
 
 ## 7. Thêm từ vựng
 
@@ -146,7 +147,22 @@ Mở `server/seed.js`, thêm vào mảng `WORDS`:
 
 Rồi chạy `npm run seed` (và deploy lại nếu dùng Turso).
 
-## 8. Xử lý sự cố
+## 8. Trang quản trị (đếm người dùng)
+
+Mở **`#/admin`** — nút **📊 Trang quản trị** sẽ hiện trong trang *Tài khoản* nếu bạn là admin. Trang này đọc thẳng từ database của bạn (không cần Google Analytics, không cookie theo dõi):
+
+- Tổng số tài khoản, số **đăng ký mới hôm nay**, số **người hoạt động hôm nay**
+- Lượt học hôm nay / tổng lượt học, tổng số từ đã thuộc
+- Biểu đồ đăng ký **7 ngày qua**
+- **Bảng xếp hạng** theo XP (chuỗi hiện tại, kỷ lục, số từ đã thuộc)
+
+**Ai là admin?**
+- Nếu đặt `ADMIN_USERS=ten1,ten2` trong `.env` (và cả trên Vercel) → đúng những tên đó.
+- Nếu để trống → **tài khoản đăng ký đầu tiên** trở thành admin.
+
+> Trên Vercel, nhớ thêm biến `ADMIN_USERS` (không bắt buộc) và bấm **Redeploy** sau khi đổi biến.
+
+## 9. Xử lý sự cố
 
 - **Trang trắng / 404 file tĩnh:** Vercel nên tự phục vụ `public/`. Nếu không, thêm file `vercel.json` với `{ "outputDirectory": "public" }` và deploy lại.
 - **`TURSO_*` sai:** API trả "Lỗi máy chủ". Kiểm tra lại URL/token trong Environment Variables.
