@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Học Tiếng Anh · Flashcards &amp; Đoán từ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f5ff; --bg-accent:#e7ebff; --surface:#ffffff; --surface-2:#f7f8ff;
+    --text:#1b1f36; --muted:#6d748f; --border:#e6e9f7;
+    --accent:#6c5ce7; --accent-soft:#efedff; --green:#12b886; --green-soft:#e3fbf1;
+    --red:#f2545b; --red-soft:#ffe9ea; --gold:#f7b731;
+    --shadow:0 14px 34px rgba(28,32,72,.10);
+    --shadow-sm:0 6px 16px rgba(28,32,72,.08);
+  }
+  [data-theme="dark"]{
+    --bg:#0e1020; --bg-accent:#12152a; --surface:#191d33; --surface-2:#20253f;
+    --text:#eef1ff; --muted:#9aa2c6; --border:#282e4c;
+    --accent:#8b7cf6; --accent-soft:#242045; --green:#22d3a5; --green-soft:#123027;
+    --red:#ff6b76; --red-soft:#3a1b22; --gold:#ffcc4d;
+    --shadow:0 16px 40px rgba(0,0,0,.55);
+    --shadow-sm:0 6px 18px rgba(0,0,0,.40);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    margin:0; font-family:'Nunito',system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(1000px 600px at 100% -10%, var(--bg-accent), transparent 60%),
+      radial-gradient(800px 500px at -10% 110%, var(--bg-accent), transparent 55%),
+      var(--bg);
+    transition:background .4s ease, color .3s ease;
+    display:flex; flex-direction:column; min-height:100dvh;
+  }
+  .wrap{width:100%; max-width:640px; margin:0 auto; padding:16px 16px 40px; flex:1; display:flex; flex-direction:column;}
+
+  /* ---------- header ---------- */
+  header{display:flex; align-items:center; justify-content:space-between; padding:6px 4px 14px;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:900; font-size:1.15rem; letter-spacing:.2px;}
+  .brand .flag{font-size:1.6rem; filter:drop-shadow(0 3px 6px rgba(0,0,0,.15));}
+  .brand small{display:block; font-size:.7rem; font-weight:700; color:var(--muted); letter-spacing:.6px; text-transform:uppercase;}
+  .icon-btn{
+    width:46px; height:46px; border-radius:14px; border:1px solid var(--border);
+    background:var(--surface); color:var(--text); font-size:1.25rem; cursor:pointer;
+    box-shadow:var(--shadow-sm); transition:transform .15s ease, background .3s;
+  }
+  .icon-btn:active{transform:scale(.92);}
+
+  /* ---------- tabs ---------- */
+  .tabs{display:grid; grid-template-columns:1fr 1fr; gap:8px; background:var(--surface-2);
+    border:1px solid var(--border); padding:6px; border-radius:18px; margin-bottom:18px; box-shadow:var(--shadow-sm);}
+  .tab{
+    border:0; background:transparent; color:var(--muted); font-family:inherit; font-weight:800;
+    font-size:.98rem; padding:12px 8px; border-radius:12px; cursor:pointer; transition:all .2s ease;
+  }
+  .tab.active{background:var(--surface); color:var(--text); box-shadow:var(--shadow-sm); transform:translateY(-1px);}
+
+  /* ---------- flashcard ---------- */
+  .fc-top{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+  #fcProgress{font-weight:800; font-size:.85rem; color:var(--muted); min-width:64px;}
+  .bar{flex:1; height:10px; background:var(--surface-2); border:1px solid var(--border); border-radius:99px; overflow:hidden;}
+  .bar > div{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--green)); border-radius:99px; transition:width .35s ease;}
+
+  .card{perspective:1400px; margin:6px 0 4px; cursor:pointer;}
+  .card-inner{position:relative; width:100%; min-height:360px; transform-style:preserve-3d;
+    transition:transform .6s cubic-bezier(.3,.9,.3,1);}
+  .card.flipped .card-inner{transform:rotateY(180deg);}
+  .face{
+    position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden;
+    background:var(--surface); border:1px solid var(--border); border-radius:26px;
+    box-shadow:var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:28px 22px; text-align:center; gap:6px;
+  }
+  .face.back{transform:rotateY(180deg); background:linear-gradient(160deg,var(--accent-soft),var(--surface));}
+  .emoji{font-size:5rem; line-height:1; margin-bottom:6px; animation:pop .4s ease;}
+  .word{font-size:2.6rem; font-weight:900; letter-spacing:-.5px;}
+  .ipa{color:var(--muted); font-weight:700; font-size:1rem;}
+  .speak{margin-top:14px; border:1px solid var(--border); background:var(--surface-2); color:var(--text);
+    font-family:inherit; font-weight:800; font-size:.9rem; padding:9px 18px; border-radius:99px; cursor:pointer;
+    transition:transform .15s, background .2s;}
+  .speak:active{transform:scale(.94);}
+  .vi-label{font-size:.78rem; font-weight:800; text-transform:uppercase; letter-spacing:1.2px; color:var(--accent);}
+  .vi{font-size:2.2rem; font-weight:900; margin:2px 0 8px;}
+  .example{color:var(--muted); font-weight:700; font-size:.98rem; line-height:1.55; padding:0 6px;}
+  .example .ex-vi{color:var(--text); opacity:.75; font-size:.9rem; font-style:italic;}
+  .badge-known{position:absolute; top:16px; right:18px; font-size:1.2rem; opacity:0; transition:opacity .3s;}
+  .card.known .badge-known{opacity:1;}
+
+  .hint{text-align:center; color:var(--muted); font-weight:700; font-size:.85rem; margin:14px 0 12px;}
+
+  .fc-actions{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .btn{border:0; font-family:inherit; font-weight:900; font-size:1rem; padding:16px; border-radius:16px; cursor:pointer;
+    transition:transform .12s ease, filter .2s;}
+  .btn:active{transform:scale(.96);}
+  .btn.ghost{background:var(--surface); color:var(--text); border:1px solid var(--border); box-shadow:var(--shadow-sm);}
+  .btn.primary{background:linear-gradient(135deg,var(--accent),#8f7bff); color:#fff; box-shadow:0 10px 24px rgba(108,92,231,.35);}
+  .nav-arrows{display:flex; justify-content:space-between; margin-top:14px;}
+  .nav-arrows button{background:transparent; border:0; color:var(--muted); font-family:inherit; font-weight:800;
+    font-size:.95rem; cursor:pointer; padding:8px 12px; border-radius:10px;}
+  .nav-arrows button:hover{color:var(--accent);}
+
+  /* ---------- guess ---------- */
+  .score-row{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px;}
+  .stat{background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:14px;
+    text-align:center; font-weight:800; color:var(--muted); box-shadow:var(--shadow-sm);}
+  .stat b{color:var(--text); font-size:1.25rem; display:block; margin-top:2px;}
+  .question{background:var(--surface); border:1px solid var(--border); border-radius:26px; box-shadow:var(--shadow);
+    padding:26px 20px; text-align:center; margin-bottom:16px;}
+  .question .emoji{font-size:4.2rem;}
+  .q-vi{font-weight:800; font-size:1.4rem; line-height:1.4;}
+  .q-vi b{color:var(--accent);}
+  .options{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .option{
+    background:var(--surface); border:2px solid var(--border); color:var(--text); font-family:inherit;
+    font-weight:900; font-size:1.15rem; padding:20px 10px; border-radius:18px; cursor:pointer;
+    box-shadow:var(--shadow-sm); transition:transform .12s, border-color .2s, background .2s;
+  }
+  .option:active{transform:scale(.97);}
+  .option.correct{border-color:var(--green); background:var(--green-soft); animation:pop .4s ease;}
+  .option.wrong{border-color:var(--red); background:var(--red-soft); animation:shake .4s ease;}
+  .option:disabled{cursor:default;}
+  .feedback{text-align:center; font-weight:900; font-size:1.15rem; margin-top:16px; min-height:28px;}
+  .feedback.ok{color:var(--green);}
+  .feedback.no{color:var(--red);}
+
+  @keyframes pop{0%{transform:scale(.85);}60%{transform:scale(1.06);}100%{transform:scale(1);}}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-7px);}75%{transform:translateX(7px);}}
+  [hidden]{display:none !important;}
+  @media (max-width:400px){
+    .word{font-size:2.1rem;} .vi{font-size:1.8rem;} .option{font-size:1rem; padding:16px 6px;}
+    .emoji{font-size:4rem;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <span class="flag">🇬🇧</span>
+      <span>Học Tiếng Anh<small>Luyện từ vựng mỗi ngày</small></span>
+    </div>
+    <button class="icon-btn" id="themeBtn" title="Đổi nền sáng/tối">🌙</button>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-view="flash">🃏 Thẻ ghi nhớ</button>
+    <button class="tab" data-view="guess">🎯 Đoán từ</button>
+  </nav>
+
+  <!-- FLASHCARDS -->
+  <section id="view-flash">
+    <div class="fc-top">
+      <span id="fcProgress">1 / 50</span>
+      <div class="bar"><div id="fcBar"></div></div>
+    </div>
+
+    <div class="card" id="fcCard">
+      <div class="card-inner">
+        <div class="face front">
+          <span class="badge-known">✅</span>
+          <div class="emoji" id="fcEmoji">🍎</div>
+          <div class="word" id="fcWord">apple</div>
+          <div class="ipa" id="fcIpa">/ˈæp.əl/</div>
+          <button class="speak" id="fcSpeak">🔊 Nghe</button>
+        </div>
+        <div class="face back">
+          <div class="vi-label">Nghĩa tiếng Việt</div>
+          <div class="vi" id="fcVi">quả táo</div>
+          <div class="example" id="fcEx"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="hint">👆 Chạm vào thẻ để lật · dùng ← → để chuyển</p>
+
+    <div class="fc-actions">
+      <button class="btn ghost" id="fcAgain">🔁 Chưa thuộc</button>
+      <button class="btn primary" id="fcKnown">✅ Đã thuộc</button>
+    </div>
+    <div class="nav-arrows">
+      <button id="fcPrev">← Trước</button>
+      <button id="fcNext">Sau →</button>
+    </div>
+  </section>
+
+  <!-- GUESS THE WORD -->
+  <section id="view-guess" hidden>
+    <div class="score-row">
+      <div class="stat">🏆 Điểm<b id="gScore">0</b></div>
+      <div class="stat">🔥 Chuỗi đúng<b id="gStreak">0</b></div>
+    </div>
+    <div class="question">
+      <div class="emoji" id="gEmoji">🍎</div>
+      <div class="q-vi">Từ tiếng Anh của <b id="gVi">quả táo</b> là gì?</div>
+    </div>
+    <div class="options" id="gOptions"></div>
+    <div class="feedback" id="gFeedback"></div>
+  </section>
+</div>
+
+<script>
+/* ============================ TỪ VỰNG ============================ */
+const WORDS = [
+  {en:"apple",     vi:"quả táo",       emoji:"🍎", ipa:"/ˈæp.əl/",       ex:"I eat an apple every day.",       exVi:"Tôi ăn một quả táo mỗi ngày."},
+  {en:"banana",    vi:"quả chuối",     emoji:"🍌", ipa:"/bəˈnɑː.nə/",     ex:"Monkeys love bananas.",           exVi:"Khỉ rất thích chuối."},
+  {en:"orange",    vi:"quả cam",       emoji:"🍊", ipa:"/ˈɒr.ɪndʒ/",      ex:"This orange is very sweet.",       exVi:"Quả cam này rất ngọt."},
+  {en:"bread",     vi:"bánh mì",       emoji:"🍞", ipa:"/bred/",          ex:"She buys fresh bread.",            exVi:"Cô ấy mua bánh mì tươi."},
+  {en:"rice",      vi:"cơm",           emoji:"🍚", ipa:"/raɪs/",          ex:"We eat rice with fish.",           exVi:"Chúng tôi ăn cơm với cá."},
+  {en:"water",     vi:"nước",          emoji:"💧", ipa:"/ˈwɔː.tər/",      ex:"Drink more water every day.",      exVi:"Hãy uống nhiều nước mỗi ngày."},
+  {en:"milk",      vi:"sữa",           emoji:"🥛", ipa:"/mɪlk/",          ex:"The baby drinks milk.",            exVi:"Em bé uống sữa."},
+  {en:"egg",       vi:"quả trứng",     emoji:"🥚", ipa:"/eɡ/",            ex:"I eat two eggs for breakfast.",    exVi:"Tôi ăn hai quả trứng vào bữa sáng."},
+  {en:"fish",      vi:"con cá",        emoji:"🐟", ipa:"/fɪʃ/",           ex:"The fish swims in the river.",     exVi:"Con cá bơi dưới sông."},
+  {en:"dog",       vi:"con chó",       emoji:"🐶", ipa:"/dɒɡ/",           ex:"My dog is very friendly.",         exVi:"Con chó của tôi rất thân thiện."},
+  {en:"cat",       vi:"con mèo",       emoji:"🐱", ipa:"/kæt/",           ex:"The cat sleeps on the sofa.",      exVi:"Con mèo ngủ trên ghế sofa."},
+  {en:"bird",      vi:"con chim",      emoji:"🐦", ipa:"/bɜːd/",          ex:"A bird sings outside.",            exVi:"Một con chim hót bên ngoài."},
+  {en:"elephant",  vi:"con voi",       emoji:"🐘", ipa:"/ˈel.ɪ.fənt/",    ex:"The elephant is very big.",        exVi:"Con voi rất to."},
+  {en:"tiger",     vi:"con hổ",        emoji:"🐯", ipa:"/ˈtaɪ.ɡər/",      ex:"The tiger is dangerous.",          exVi:"Con hổ rất nguy hiểm."},
+  {en:"monkey",    vi:"con khỉ",       emoji:"🐵", ipa:"/ˈmʌŋ.ki/",       ex:"The monkey climbs a tree.",        exVi:"Con khỉ trèo cây."},
+  {en:"horse",     vi:"con ngựa",      emoji:"🐴", ipa:"/hɔːs/",          ex:"The horse runs very fast.",        exVi:"Con ngựa chạy rất nhanh."},
+  {en:"pig",       vi:"con heo",       emoji:"🐷", ipa:"/pɪɡ/",           ex:"The pig is in the mud.",           exVi:"Con heo ở trong bùn."},
+  {en:"cow",       vi:"con bò",        emoji:"🐮", ipa:"/kaʊ/",           ex:"The cow gives us milk.",           exVi:"Con bò cho chúng ta sữa."},
+  {en:"book",      vi:"quyển sách",    emoji:"📚", ipa:"/bʊk/",           ex:"I read a book at night.",          exVi:"Tôi đọc sách vào buổi tối."},
+  {en:"pen",       vi:"cây bút",       emoji:"🖊️", ipa:"/pen/",           ex:"Write your name with a pen.",      exVi:"Viết tên bạn bằng bút."},
+  {en:"chair",     vi:"cái ghế",       emoji:"🪑", ipa:"/tʃeər/",         ex:"Please sit on the chair.",         exVi:"Mời bạn ngồi lên ghế."},
+  {en:"phone",     vi:"điện thoại",    emoji:"📱", ipa:"/fəʊn/",          ex:"My phone is brand new.",           exVi:"Điện thoại của tôi mới tinh."},
+  {en:"computer",  vi:"máy tính",      emoji:"💻", ipa:"/kəmˈpjuː.tər/",  ex:"I use a computer for work.",       exVi:"Tôi dùng máy tính để làm việc."},
+  {en:"car",       vi:"ô tô",          emoji:"🚗", ipa:"/kɑːr/",          ex:"The car is very fast.",            exVi:"Chiếc ô tô rất nhanh."},
+  {en:"house",     vi:"ngôi nhà",      emoji:"🏠", ipa:"/haʊs/",          ex:"We live in a big house.",          exVi:"Chúng tôi sống trong một ngôi nhà lớn."},
+  {en:"key",       vi:"chìa khóa",     emoji:"🔑", ipa:"/kiː/",           ex:"Where is my key?",                 exVi:"Chìa khóa của tôi đâu rồi?"},
+  {en:"clock",     vi:"đồng hồ",       emoji:"🕐", ipa:"/klɒk/",          ex:"The clock shows three o'clock.",   exVi:"Đồng hồ chỉ ba giờ."},
+  {en:"sun",       vi:"mặt trời",      emoji:"☀️", ipa:"/sʌn/",           ex:"The sun is bright today.",         exVi:"Hôm nay mặt trời rất sáng."},
+  {en:"moon",      vi:"mặt trăng",     emoji:"🌙", ipa:"/muːn/",          ex:"The moon is beautiful tonight.",   exVi:"Đêm nay mặt trăng thật đẹp."},
+  {en:"star",      vi:"ngôi sao",      emoji:"⭐", ipa:"/stɑːr/",         ex:"I see a star in the sky.",         exVi:"Tôi thấy một ngôi sao trên trời."},
+  {en:"tree",      vi:"cái cây",       emoji:"🌳", ipa:"/triː/",          ex:"The tree is very tall.",           exVi:"Cái cây rất cao."},
+  {en:"flower",    vi:"bông hoa",      emoji:"🌸", ipa:"/ˈflaʊ.ər/",      ex:"She likes the red flower.",        exVi:"Cô ấy thích bông hoa màu đỏ."},
+  {en:"rain",      vi:"mưa",           emoji:"🌧️", ipa:"/reɪn/",          ex:"It will rain tomorrow.",           exVi:"Ngày mai trời sẽ mưa."},
+  {en:"cloud",     vi:"đám mây",       emoji:"☁️", ipa:"/klaʊd/",         ex:"There is one cloud in the sky.",   exVi:"Có một đám mây trên trời."},
+  {en:"mountain",  vi:"ngọn núi",      emoji:"🏔️", ipa:"/ˈmaʊn.tɪn/",     ex:"We climb the mountain.",           exVi:"Chúng tôi leo núi."},
+  {en:"sea",       vi:"biển",          emoji:"🌊", ipa:"/siː/",           ex:"The sea is blue today.",           exVi:"Hôm nay biển có màu xanh."},
+  {en:"eye",       vi:"mắt",           emoji:"👁️", ipa:"/aɪ/",            ex:"Close your eyes, please.",         exVi:"Làm ơn nhắm mắt lại."},
+  {en:"ear",       vi:"tai",           emoji:"👂", ipa:"/ɪər/",           ex:"I hear with my ears.",             exVi:"Tôi nghe bằng tai."},
+  {en:"nose",      vi:"mũi",           emoji:"👃", ipa:"/nəʊz/",          ex:"The nose can smell.",              exVi:"Cái mũi có thể ngửi."},
+  {en:"mouth",     vi:"cái miệng",     emoji:"👄", ipa:"/maʊθ/",          ex:"Please open your mouth.",          exVi:"Làm ơn mở miệng ra."},
+  {en:"hand",      vi:"bàn tay",       emoji:"✋", ipa:"/hænd/",          ex:"Wash your hands before eating.",   exVi:"Rửa tay trước khi ăn."},
+  {en:"foot",      vi:"bàn chân",      emoji:"🦶", ipa:"/fʊt/",           ex:"My foot hurts a little.",          exVi:"Bàn chân tôi hơi đau."},
+  {en:"heart",     vi:"trái tim",      emoji:"❤️", ipa:"/hɑːt/",          ex:"She has a kind heart.",            exVi:"Cô ấy có một trái tim nhân hậu."},
+  {en:"school",    vi:"trường học",    emoji:"🏫", ipa:"/skuːl/",         ex:"I go to school every day.",        exVi:"Tôi đi học mỗi ngày."},
+  {en:"teacher",   vi:"giáo viên",     emoji:"👩‍🏫", ipa:"/ˈtiː.tʃər/",     ex:"The teacher is very kind.",        exVi:"Cô giáo rất tốt bụng."},
+  {en:"friend",    vi:"bạn bè",        emoji:"🤝", ipa:"/frend/",         ex:"He is my best friend.",            exVi:"Cậu ấy là bạn thân nhất của tôi."},
+  {en:"family",    vi:"gia đình",      emoji:"👨‍👩‍👧", ipa:"/ˈfæm.əl.i/",     ex:"I love my family very much.",      exVi:"Tôi yêu gia đình mình rất nhiều."},
+  {en:"time",      vi:"thời gian",     emoji:"⏰", ipa:"/taɪm/",          ex:"What time is it now?",             exVi:"Bây giờ là mấy giờ rồi?"},
+  {en:"money",     vi:"tiền",          emoji:"💰", ipa:"/ˈmʌn.i/",        ex:"I need money for the bus.",        exVi:"Tôi cần tiền để đi xe buýt."},
+  {en:"music",     vi:"âm nhạc",       emoji:"🎵", ipa:"/ˈmjuː.zɪk/",     ex:"I love listening to music.",       exVi:"Tôi rất thích nghe nhạc."},
+];
+
+/* ============================ TIỆN ÍCH ============================ */
+const $ = (id) => document.getElementById(id);
+const KEY_LEARNED = "en_practice_learned";
+const KEY_THEME   = "en_practice_theme";
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=(Math.random()*(i+1))|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+let learned = new Set();
+try { learned = new Set(JSON.parse(localStorage.getItem(KEY_LEARNED) || "[]")); } catch(e){}
+
+function saveLearned(){ try{ localStorage.setItem(KEY_LEARNED, JSON.stringify([...learned])); }catch(e){} }
+
+function speak(text){
+  if(!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "en-US"; u.rate = 0.9; u.pitch = 1;
+  window.speechSynthesis.speak(u);
+}
+
+/* ============================ CHỦ ĐỀ SÁNG/TỐI ============================ */
+const themeBtn = $("themeBtn");
+function applyTheme(t){
+  document.documentElement.dataset.theme = t;
+  themeBtn.textContent = t === "dark" ? "☀️" : "🌙";
+  try{ localStorage.setItem(KEY_THEME, t); }catch(e){}
+}
+(function initTheme(){
+  let t = null;
+  try{ t = localStorage.getItem(KEY_THEME); }catch(e){}
+  if(!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  applyTheme(t);
+})();
+themeBtn.addEventListener("click", () => {
+  applyTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
+});
+
+/* ============================ ĐIỀU HƯỚNG TAB ============================ */
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    const view = tab.dataset.view;
+    $("view-flash").hidden = view !== "flash";
+    $("view-guess").hidden = view !== "guess";
+    if(view === "guess") newQuestion();
+  });
+});
+
+/* ============================ THẺ GHI NHỚ ============================ */
+const deck = shuffle([...WORDS]);
+let idx = 0;
+const fcCard = $("fcCard");
+
+function renderFlash(){
+  const w = deck[idx];
+  $("fcEmoji").textContent = w.emoji;
+  $("fcWord").textContent  = w.en;
+  $("fcIpa").textContent   = w.ipa;
+  $("fcVi").textContent    = w.vi;
+  $("fcEx").innerHTML      = w.ex + '<br><span class="ex-vi">' + w.exVi + '</span>';
+  $("fcProgress").textContent = (idx + 1) + " / " + deck.length;
+  $("fcBar").style.width = (((idx + 1) / deck.length) * 100) + "%";
+  fcCard.classList.remove("flipped");
+  fcCard.classList.toggle("known", learned.has(w.en));
+  // khởi động lại animation emoji
+  const em = $("fcEmoji");
+  em.style.animation = "none"; void em.offsetWidth; em.style.animation = "";
+}
+
+function nextCard(step){
+  idx = (idx + step + deck.length) % deck.length;
+  renderFlash();
+}
+
+fcCard.addEventListener("click", (e) => {
+  if(e.target.closest(".speak")) return;
+  fcCard.classList.toggle("flipped");
+});
+$("fcSpeak").addEventListener("click", (e) => { e.stopPropagation(); speak(deck[idx].en); });
+$("fcNext").addEventListener("click", () => nextCard(1));
+$("fcPrev").addEventListener("click", () => nextCard(-1));
+$("fcKnown").addEventListener("click", () => { learned.add(deck[idx].en); saveLearned(); nextCard(1); });
+$("fcAgain").addEventListener("click", () => { learned.delete(deck[idx].en); saveLearned(); nextCard(1); });
+
+document.addEventListener("keydown", (e) => {
+  if($("view-flash").hidden) return;
+  if(e.key === "ArrowRight") nextCard(1);
+  if(e.key === "ArrowLeft")  nextCard(-1);
+  if(e.key === " ") { e.preventDefault(); fcCard.classList.toggle("flipped"); }
+});
+
+/* ============================ ĐOÁN TỪ ============================ */
+let gScore = 0, gStreak = 0, gCurrent = null, gLocked = false;
+
+function updateStats(){
+  $("gScore").textContent = gScore;
+  $("gStreak").textContent = gStreak;
+}
+
+function newQuestion(){
+  gLocked = false;
+  gCurrent = WORDS[(Math.random() * WORDS.length) | 0];
+
+  $("gEmoji").textContent = gCurrent.emoji;
+  $("gVi").textContent    = gCurrent.vi;
+  $("gFeedback").textContent = "";
+  $("gFeedback").className = "feedback";
+
+  const opts = [gCurrent.en];
+  while(opts.length < 4){
+    const r = WORDS[(Math.random() * WORDS.length) | 0].en;
+    if(!opts.includes(r)) opts.push(r);
+  }
+  shuffle(opts);
+
+  const box = $("gOptions");
+  box.innerHTML = "";
+  opts.forEach(o => {
+    const b = document.createElement("button");
+    b.className = "option";
+    b.textContent = o;
+    b.addEventListener("click", () => answer(b, o));
+    box.appendChild(b);
+  });
+  $("gEmoji").style.animation = "none"; void $("gEmoji").offsetWidth; $("gEmoji").style.animation = "";
+}
+
+function answer(btn, choice){
+  if(gLocked) return;
+  gLocked = true;
+  const correct = choice === gCurrent.en;
+  const fb = $("gFeedback");
+
+  if(correct){
+    gScore += 10; gStreak += 1;
+    btn.classList.add("correct");
+    fb.textContent = "🎉 Chính xác!";
+    fb.className = "feedback ok";
+  } else {
+    gStreak = 0;
+    btn.classList.add("wrong");
+    fb.textContent = "❌ Đáp án đúng là: " + gCurrent.en;
+    fb.className = "feedback no";
+    document.querySelectorAll("#gOptions .option").forEach(b => {
+      if(b.textContent === gCurrent.en) b.classList.add("correct");
+    });
+  }
+  document.querySelectorAll("#gOptions .option").forEach(b => b.disabled = true);
+  speak(gCurrent.en);
+  updateStats();
+  setTimeout(newQuestion, correct ? 850 : 1600);
+}
+
+/* ============================ KHỞI ĐỘNG ============================ */
+renderFlash();
+updateStats();
+</script>
+</body>
+</html>
