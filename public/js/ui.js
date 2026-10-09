@@ -47,7 +47,7 @@ export function renderTopbar() {
         <div class="streak-pill" title="Chuỗi ngày học liên tiếp">🔥 <b id="topStreak">${s.current_streak || 0}</b></div>
         <button class="icon-btn" id="themeBtn" title="Sáng / Tối">🌙</button>
         <div class="user-chip">
-          <span>${escapeHtml(state.user.username)}</span>
+          <a class="user-name" href="#/profile" title="Tài khoản của bạn">${escapeHtml(state.user.username)}</a>
           <button class="icon-btn small" id="logoutBtn" title="Đăng xuất">⎋</button>
         </div>
       </div>
