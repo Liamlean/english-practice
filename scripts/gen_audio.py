@@ -1,4 +1,11 @@
-import urllib.request, urllib.parse, os, time, re, json
+import urllib.request, urllib.parse, os, time, re, json, sys
+
+# Robust Unicode output on every platform (Windows cp1252 consoles would
+# otherwise choke on Vietnamese characters such as "đ").
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+except Exception:
+    pass
 
 SEED = open("server/seed.js", encoding="utf-8").read()
 words = list(dict.fromkeys(re.findall(r'\{\s*en:\s*"([^"]+)"', SEED)))

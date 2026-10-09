@@ -155,7 +155,12 @@ Mở `server/seed.js`, thêm vào mảng `WORDS`:
   example_en: "The sunflower faces the sun.", example_vi: "Hoa hướng dương hướng về mặt trời." },
 ```
 
-Rồi chạy `npm run seed` (và deploy lại nếu dùng Turso).
+Rồi chỉ cần **push lên GitHub** — Vercel sẽ tự động:
+- **Đồng bộ từ mới vào database** (`scripts/deploy_tasks.js` → `INSERT OR IGNORE`, thêm chứ không xoá, an toàn 100% với dữ liệu người học);
+- **Sinh file audio tiếng Anh (Anh-Anh)** cho từ mới còn thiếu (`scripts/gen_audio.py`, chỉ tạo file chưa có);
+- Deploy xong, mở lại trang web là số từ và âm thanh đã cập nhật.
+
+Không cần chạy lệnh nào thủ công trên máy nữa. Nếu muốn dùng thủ công cho mục đích chạy thử, vẫn chạy được: `npm run seed`.
 
 ## 8. Trang quản trị (đếm người dùng)
 

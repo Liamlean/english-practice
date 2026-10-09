@@ -10,7 +10,8 @@
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "seed": "node server/seed.js"
+    "seed": "node server/seed.js",
+    "build": "node scripts/deploy_tasks.js"
   },
   "dependencies": {
     "@libsql/client": "^0.14.0",
