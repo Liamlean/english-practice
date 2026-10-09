@@ -5,15 +5,7 @@ import { state, setStats } from "../store.js";
 import { api } from "../api.js";
 import { navigate, reload } from "../router.js";
 import { renderTopbar, toast, escapeHtml } from "../ui.js";
-
-function speak(text) {
-  if (!("speechSynthesis" in window)) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = "en-US";
-  u.rate = 0.9;
-  window.speechSynthesis.speak(u);
-}
+import { speak } from "../speech.js";
 
 function shuffle(a) {
   for (let i = a.length - 1; i > 0; i--) {

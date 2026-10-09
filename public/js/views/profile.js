@@ -5,6 +5,7 @@ import { state, setUser, setStats } from "../store.js";
 import { api } from "../api.js";
 import { navigate, reload } from "../router.js";
 import { escapeHtml, toast } from "../ui.js";
+import { englishVoices, getSavedVoiceName, saveVoiceName, speak, isBritishVoice } from "../speech.js";
 
 export function renderProfile(el) {
   const s = state.stats || {};
@@ -45,6 +46,15 @@ export function renderProfile(el) {
           <p class="error" id="pwErr"></p>
           <button class="btn btn-primary btn-block" type="submit" id="pwBtn">Cập nhật mật khẩu</button>
         </form>
+      </details>
+
+      <details class="pw" id="voiceBox">
+        <summary>🔊 Giọng đọc</summary>
+        <label class="field">
+          <span>Chọn giọng tiếng Anh (ưu tiên Anh–Anh 🇬🇧)</span>
+          <select id="voiceSel" class="voice-select"></select>
+        </label>
+        <button class="btn btn-ghost btn-block" id="voiceTest" type="button">🔊 Nghe thử</button>
       </details>
 
       ${u.is_admin ? `<button class="btn btn-ghost btn-block" id="admin">📊 Trang quản trị</button>` : ""}
@@ -90,6 +100,30 @@ export function renderProfile(el) {
       pwBtn.disabled = false;
       pwBtn.textContent = "Cập nhật mật khẩu";
     }
+  });
+
+  const voiceSel = el.querySelector("#voiceSel");
+  const voiceTest = el.querySelector("#voiceTest");
+  englishVoices().then((list) => {
+    const saved = getSavedVoiceName();
+    list.sort(
+      (a, b) => Number(isBritishVoice(b)) - Number(isBritishVoice(a)) || a.name.localeCompare(b.name)
+    );
+    voiceSel.innerHTML = list.length
+      ? list
+          .map(
+            (v) =>
+              `<option value="${escapeHtml(v.name)}"${v.name === saved ? " selected" : ""}>${escapeHtml(
+                v.name
+              )} — ${escapeHtml(v.lang)}</option>`
+          )
+          .join("")
+      : `<option value="">(Thiết bị chưa có giọng tiếng Anh)</option>`;
+  });
+  voiceSel.addEventListener("change", () => saveVoiceName(voiceSel.value));
+  voiceTest.addEventListener("click", () => {
+    if (voiceSel.value) saveVoiceName(voiceSel.value);
+    speak("Hello! Let's practise English together.");
   });
 
   el.querySelector("#logout").addEventListener("click", async () => {
