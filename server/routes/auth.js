@@ -80,4 +80,35 @@ router.get(
   })
 );
 
+// Change password for the logged-in user. No email needed: proving you know the
+// current password is enough to replace it.
+router.post(
+  "/change-password",
+  requireAuth,
+  ah(async (req, res) => {
+    const { current_password, new_password } = req.body || {};
+
+    if (typeof new_password !== "string" || new_password.length < 6) {
+      return res.status(400).json({ error: "Mật khẩu mới phải có ít nhất 6 ký tự." });
+    }
+    if (current_password === new_password) {
+      return res.status(400).json({ error: "Mật khẩu mới phải khác mật khẩu hiện tại." });
+    }
+
+    const row = await get("SELECT * FROM users WHERE id = ?", [req.userId]);
+    if (!row) {
+      clearAuthCookie(res);
+      return res.status(401).json({ error: "Chưa đăng nhập." });
+    }
+    if (!verifyPassword(String(current_password || ""), row.password_hash)) {
+      return res.status(400).json({ error: "Mật khẩu hiện tại không đúng." });
+    }
+
+    await run("UPDATE users SET password_hash = ? WHERE id = ?", [hashPassword(new_password), req.userId]);
+    // Refresh the session cookie so the 30-day window restarts.
+    setAuthCookie(res, signSession(req.userId));
+    res.json({ ok: true });
+  })
+);
+
 export default router;

@@ -85,6 +85,7 @@ git push -u origin main
 | Tính năng | Mô tả |
 |---|---|
 | Đăng ký / Đăng nhập | Chỉ **tên đăng nhập + mật khẩu**. Mật khẩu băm bcrypt, phiên đăng nhập bằng JWT trong cookie httpOnly. |
+| Đổi mật khẩu | Trong **Hồ sơ → 🔒 Đổi mật khẩu**: nhập mật khẩu hiện tại + mật khẩu mới (≥ 6 ký tự). Không cần email. |
 | Thẻ ghi nhớ | Anh → Việt. Lật thẻ xem nghĩa + câu ví dụ, nghe phát âm, đánh dấu "đã thuộc / chưa thuộc". |
 | Đoán từ | Việt → Anh. Chọn 1 trong 4 đáp án, có phản hồi và phát âm. |
 | Chuỗi ngày học 🔥 | Học mỗi ngày để giữ chuỗi, bỏ một ngày chuỗi về 1. Lưu cả kỷ lục. |
@@ -128,6 +129,7 @@ english-practice/
 | POST | `/api/auth/login` | `{ username, password }` → đăng nhập |
 | POST | `/api/auth/logout` | đăng xuất |
 | GET | `/api/auth/me` | tài khoản hiện tại |
+| POST | `/api/auth/change-password` | `{ current_password, new_password }` → đổi mật khẩu |
 | GET | `/api/meta` | danh sách cấp độ + số từ |
 | GET | `/api/deck?level=A1&size=20` | bộ thẻ để học |
 | POST | `/api/study/review` | `{ wordId, correct, localDate }` |

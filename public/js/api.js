@@ -32,6 +32,8 @@ export const api = {
   login: (username, password) => request("POST", "/api/auth/login", { username, password }),
   logout: () => request("POST", "/api/auth/logout"),
   me: () => request("GET", "/api/auth/me"),
+  changePassword: (current_password, new_password) =>
+    request("POST", "/api/auth/change-password", { current_password, new_password }),
   meta: () => request("GET", "/api/meta"),
   stats: () => request("GET", "/api/stats?today=" + todayLocal()),
   deck: (level, size = 20) =>
